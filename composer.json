@@ -1,8 +1,14 @@
 {
   "name": "marcandreappel/batch",
+  "type": "library",
   "description": "Batch.com connector",
   "minimum-stability": "stable",
   "license": "MIT",
+  "homepage": "http://github.com/marcandreappel/batch",
+  "support": {
+    "issues": "https://github.com/briannesbitt/batch/issues",
+    "source": "https://github.com/briannesbitt/batch"
+  },
   "authors": [
     {
       "name": "Marc-André Appel",
@@ -15,7 +21,7 @@
   },
   "autoload": {
     "psr-4": {
-      "MarcAndreAppel\\Batch\\": "src"
+      "": "src/"
     }
   }
 }
