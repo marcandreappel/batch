@@ -8,7 +8,7 @@
  * @created     04/05/2018
  */
 
-namespace MarcAndreAppel\Batch\Exception;
+namespace Batch\Exception;
 
 class BatchException extends \RuntimeException
 {

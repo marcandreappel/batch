@@ -8,9 +8,9 @@
  * @created     04/05/2018
  */
 
-namespace MarcAndreAppel\Batch;
+namespace Batch;
 
-use MarcAndreAppel\Batch\Exception\BatchException;
+use Batch\Exception\BatchException;
 
 /**
  * Class BatchCustomData
