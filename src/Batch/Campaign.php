@@ -43,7 +43,8 @@ class Campaign extends BatchAbstract
 	public function send()
 	{
 		if (!strlen($_errors = $this->checkConfig()) == 0) {
-			return new BatchException("Faulty configuration: \n$_errors");
+			$error = new BatchException("Faulty configuration: \n$_errors");
+			return $error->getMessage();
 		}
 
 		$client = new Client();
@@ -59,7 +60,8 @@ class Campaign extends BatchAbstract
 					"json" => $this->config
 				));
 		} catch (GuzzleException $exception) {
-			return new BatchException($exception->getMessage());
+			$error = new BatchException($exception->getMessage());
+			return $error->getMessage();
 		}
 	}
 
