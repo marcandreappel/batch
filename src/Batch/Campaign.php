@@ -19,7 +19,7 @@ class Campaign extends BatchAbstract
 	const CUSTOM_DATA_PATH = "campaigns/create";
 
 	/** @var array Default values */
-	private $config = array(
+	protected $config = array(
 		"live" => true,
 		"push_time" => "now",
 	);
