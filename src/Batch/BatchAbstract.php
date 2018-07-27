@@ -44,7 +44,7 @@ abstract class BatchAbstract extends BatchException
 	/**
 	 * @var array $config Parameters to set
 	 */
-	protected $config = array();
+	protected $config = array('live' => true);
 
 	/**
 	 * @brief BatchService constructor.
