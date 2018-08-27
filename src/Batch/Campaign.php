@@ -8,28 +8,39 @@
  * @created     04/05/2018
  */
 
-namespace MarcAndreAppel\Batch;
+namespace Batch;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Batch\Exception\BatchException;
 
 class Campaign extends BatchAbstract
 {
 	const CUSTOM_DATA_PATH = "campaigns/create";
 
+	/**
+	 * Campaign constructor.
+	 *
+	 * @param        $apiKey
+	 * @param        $restKey
+	 * @param string $apiVersion
+	 */
 	public function __construct($apiKey, $restKey, $apiVersion = "1.1")
 	{
 		parent::__construct($apiKey, $restKey, $apiVersion);
-		$this->baseURL = "{$this->baseURL}/" . self::CUSTOM_DATA_PATH;
+		$this->baseURL .= "/" . self::CUSTOM_DATA_PATH;
 	}
 
 	/**
-	 * @param $title
-	 * @param $message
-	 *
-	 * @return mixed|\Psr\Http\Message\ResponseInterface
+	 * @return BatchException|mixed|\Psr\Http\Message\ResponseInterface
 	 */
-	public function send($title, $message) {
+	public function send()
+	{
+		if (!strlen($_errors = $this->checkConfig()) == 0) {
+			$error = new BatchException("Faulty configuration: \n$_errors");
+			return $error->getMessage();
+		}
+
 		$client = new Client();
 		try
 		{
@@ -40,20 +51,28 @@ class Campaign extends BatchAbstract
 						"Content-Type"    => "application/json",
 						"X-Authorization" => $this->restKey
 					),
-					"json"    => array(
-						"name"      => $title,
-						"live"      => true,
-						"push_time" => "now",
-						"messages"  => array(
-							array(
-								"language" => "fr",
-								"body"     => $message
-							)
-						)
-					)
+					"json" => $this->config
 				));
 		} catch (GuzzleException $exception) {
-			die($exception->getMessage());
+			$error = new BatchException($exception->getMessage());
+			return $error->getMessage();
 		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function checkConfig()
+	{
+		$_conf = $this->config;
+		$_errors = array();
+		if (!key_exists('name', $_conf) || strlen($_conf['name']) < 3) {
+			$_errors[] = "A correct campaign name is required";
+		}
+		if (!key_exists('messages', $_conf) || !is_array($_conf['messages']) || empty($_conf['messages'])) {
+			$_errors[] = "A localized message is required";
+		}
+		$error = (!empty($_errors)) ? implode(" \n", $_errors) : '';
+		return $error;
 	}
 }

@@ -10,9 +10,9 @@
  * @github      https://github.com/MatchPint/batch
  */
 
-namespace MarcAndreAppel\Batch;
+namespace Batch;
 
-use MarcAndreAppel\Batch\Exception\BatchException;
+use Batch\Exception\BatchException;
 
 /**
  * Class BatchService
@@ -42,6 +42,11 @@ abstract class BatchAbstract extends BatchException
 	protected $baseURL;
 
 	/**
+	 * @var array $config Parameters to set
+	 */
+	protected $config = array('live' => true);
+
+	/**
 	 * @brief BatchService constructor.
 	 *
 	 * @param string $apiKey     API Key corresponding to the Batch account to send request to.
@@ -61,4 +66,49 @@ abstract class BatchAbstract extends BatchException
 		$this->restKey = $restKey;
 		$this->baseURL = self::API_DOMAIN_URL . "/{$apiVersion}/{$this->apiKey}";
 	}
+
+	/**
+	 * @brief   Helper function to add values to the configuration array
+	 *
+	 * @param      $key
+	 * @param bool $value
+	 */
+	public function addConfig($key, $value = false)
+	{
+		if (is_array($key)) {
+			$_config = $this->config;
+			$this->config = array_merge($_config, $key);
+		} else {
+			$this->config[$key] = $value;
+		}
+	}
+
+	/**
+	 * @brief   Helper function to create the message array into the configuration
+	 *
+	 * @param      $language
+	 * @param      $body
+	 * @param bool $title
+	 */
+	public function setMessage($language, $body, $title = false)
+	{
+		$_message = array(
+			'language' => $language,
+			'body' => $body
+		);
+		if ($title) {
+			$_message['title'] = $title;
+		}
+		$_messages = (key_exists('messages', $this->config)) ? $this->config['messages'] : array();
+		if (!is_array($_messages)) {
+			$_messages = array();
+		}
+		$_messages[] = $_message;
+		$this->config['messages'] = $_messages;
+	}
+
+	/**
+	 * @return string
+	 */
+	abstract public function checkConfig();
 }
