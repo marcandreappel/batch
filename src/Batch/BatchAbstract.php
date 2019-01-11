@@ -12,7 +12,10 @@
 
 namespace Batch;
 
+use Batch\Data\Message;
 use Batch\Exception\BatchException;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 
 /**
  * Class BatchService
@@ -20,11 +23,14 @@ use Batch\Exception\BatchException;
  */
 abstract class BatchAbstract extends BatchException
 {
+	const TRANSACTIONAL_PATH = "transactional/send";
+	const CUSTOM_DATA_PATH = "data/users";
+	const CAMPAIGN_PATH = "campaigns/create";
 
 	/**
 	 * Domain URL of the Batch API (custom, transactional and campaigns).
 	 */
-	const API_DOMAIN_URL = "https://api.batch.com";
+	const HTTPS_API_BATCH_COM = "https://api.batch.com";
 
 	/**
 	 * @var string $apiKey Batch API Key. Identify to which account the Request should be sent.
@@ -44,7 +50,7 @@ abstract class BatchAbstract extends BatchException
 	/**
 	 * @var array $config Parameters to set
 	 */
-	protected $config = array('live' => true);
+	protected $config;
 
 	/**
 	 * @brief BatchService constructor.
@@ -52,59 +58,92 @@ abstract class BatchAbstract extends BatchException
 	 * @param string $apiKey     API Key corresponding to the Batch account to send request to.
 	 * @param string $restKey    REST Key that provides the authorisation to access to the Batch API.
 	 * @param string $apiVersion Version of the Batch API used.
+	 * @param string $apiPath    Path to the Batch API endpoint
 	 */
-	public function __construct($apiKey, $restKey, $apiVersion = '1.1')
+	public function __construct(string $apiKey, string $restKey, string $apiVersion, string $apiPath)
 	{
 		if (empty($apiKey))
+		{
 			throw new \InvalidArgumentException("You must provide a non-empty API Key");
-
+		}
 		$this->apiKey = $apiKey;
 
 		if (empty($restKey))
+		{
 			throw new \InvalidArgumentException("You must provide a non-empty Rest Key");
-
+		}
 		$this->restKey = $restKey;
-		$this->baseURL = self::API_DOMAIN_URL . "/{$apiVersion}/{$this->apiKey}";
+		$this->baseURL = self::HTTPS_API_BATCH_COM . "/{$apiVersion}/{$this->apiKey}/{$apiPath}";
 	}
 
 	/**
-	 * @brief   Helper function to add values to the configuration array
+	 * @brief Helper function to add values to the configuration array
 	 *
 	 * @param      $key
 	 * @param bool $value
 	 */
 	public function addConfig($key, $value = false)
 	{
-		if (is_array($key)) {
-			$_config = $this->config;
+		if (is_array($key))
+		{
+			$_config      = $this->config;
 			$this->config = array_merge($_config, $key);
-		} else {
+		}
+		else
+		{
 			$this->config[$key] = $value;
 		}
 	}
 
 	/**
-	 * @brief   Helper function to create the message array into the configuration
+	 * @brief Helper function to create the message array into the configuration
 	 *
-	 * @param      $language
-	 * @param      $body
-	 * @param bool $title
+	 * @param string      $language
+	 * @param string      $body
+	 * @param string|null $title
 	 */
-	public function setMessage($language, $body, $title = false)
+	public function setMessage(string $language, string $body, ?string $title = null)
 	{
-		$_message = array(
-			'language' => $language,
-			'body' => $body
-		);
-		if ($title) {
-			$_message['title'] = $title;
+		$message  = new Message($language, $body, $title);
+		$messages = (array_key_exists('messages', $this->config)
+			&& is_array($this->config['messages'])) ? $this->config['messages'] : array();
+
+		$messages[]               = $message;
+		$this->config['messages'] = $messages;
+	}
+
+	/**
+	 * @brief  Send the push notification
+	 * @return string
+	 */
+	public function send()
+	{
+		if (!strlen($_errors = $this->checkConfig()) == 0)
+		{
+			$error = new BatchException("Faulty configuration: \n$_errors");
+
+			return $error->getMessage();
 		}
-		$_messages = (key_exists('messages', $this->config)) ? $this->config['messages'] : array();
-		if (!is_array($_messages)) {
-			$_messages = array();
+
+		$client = new Client();
+		try
+		{
+			return $client->request(
+				"POST", $this->baseURL,
+				array(
+					"headers" => array(
+						"Content-Type"    => "application/json",
+						"X-Authorization" => $this->restKey
+					),
+					"json"    => $this->config
+				));
 		}
-		$_messages[] = $_message;
-		$this->config['messages'] = $_messages;
+		catch (GuzzleException $exception)
+		{
+			$error = new BatchException($exception->getMessage());
+
+			return $error->getMessage();
+		}
 	}
 
 	/**
