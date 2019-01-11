@@ -7,3 +7,29 @@
  * @link        https://www.hybride-conseil.fr
  * @created     10/01/2019
  */
+
+namespace Batch\Data;
+
+class Message {
+
+	/** @var string */
+	public $language;
+	/** @var string|void */
+	public $title;
+	/** @var string */
+	public $body;
+
+	/**
+	 * Message constructor.
+	 *
+	 * @param             $language
+	 * @param string      $body
+	 * @param string|null $title
+	 */
+	public function __construct($language, string $body, ?string $title)
+	{
+		$this->language = $language;
+		$this->body = $body;
+		$this->title = $title;
+	}
+}
