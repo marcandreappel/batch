@@ -45,10 +45,8 @@ class Transactional extends BatchAbstract
 		}
 		if (!array_key_exists('recipients', $config)
 			|| !is_object($config['recipients'])
-			|| !(method_exists($config['recipients'], "custom_ids")
-				|| method_exists($config['recipients'], "tokens")
-				|| method_exists($config['recipients'], "install_ids")
-			))
+			|| !($config['recipients'] instanceof Recipients)
+			)
 		{
 			$errors[] = "Incorrect recipients field";
 		}
