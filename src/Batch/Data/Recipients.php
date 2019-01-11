@@ -14,11 +14,11 @@ use Batch\Exception\BatchException;
 
 class Recipients
 {
-	/** @var array|void */
+	/** @var array|null */
 	private $tokens = null;
-	/** @var array|void */
+	/** @var array|null */
 	private $customIDs = null;
-	/** @var array|void */
+	/** @var array|null */
 	private $installIDs = null;
 
 	/**
