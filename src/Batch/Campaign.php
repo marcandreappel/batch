@@ -16,7 +16,7 @@ use Batch\Exception\BatchException;
 
 class Campaign extends BatchAbstract
 {
-	const CUSTOM_DATA_PATH = "campaigns/create";
+	protected $config = array('live' => true);
 
 	/**
 	 * Campaign constructor.
@@ -28,7 +28,7 @@ class Campaign extends BatchAbstract
 	public function __construct($apiKey, $restKey, $apiVersion = "1.1")
 	{
 		parent::__construct($apiKey, $restKey, $apiVersion);
-		$this->baseURL .= "/" . self::CUSTOM_DATA_PATH;
+		$this->baseURL .= "/" . Batch::CAMPAIGN_PATH;
 	}
 
 	/**
