@@ -27,8 +27,7 @@ class Campaign extends BatchAbstract
 	 */
 	public function __construct($apiKey, $restKey, $apiVersion = "1.1")
 	{
-		parent::__construct($apiKey, $restKey, $apiVersion);
-		$this->baseURL .= "/" . Batch::CAMPAIGN_PATH;
+		parent::__construct($apiKey, $restKey, $apiVersion, parent::CAMPAIGN_PATH);
 	}
 
 	/**
