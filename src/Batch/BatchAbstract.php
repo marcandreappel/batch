@@ -98,18 +98,24 @@ abstract class BatchAbstract extends BatchException
 	/**
 	 * @brief Helper function to create the message array into the configuration
 	 *
-	 * @param string      $language
+	 * @param string|null $language
 	 * @param string      $body
 	 * @param string|null $title
 	 */
-	public function setMessage(string $language, string $body, ?string $title = null)
+	public function setMessage(?string $language, string $body, ?string $title = null): void
 	{
-		$message  = new Message($language, $body, $title);
-		$messages = (array_key_exists('messages', $this->config)
-			&& is_array($this->config['messages'])) ? $this->config['messages'] : array();
+		$message  = new Message($body, $title, $language);
 
-		$messages[]               = $message;
-		$this->config['messages'] = $messages;
+		if (!is_null($language)) {
+			$messages[]               = $message;
+			$messages = (array_key_exists('messages', $this->config)
+				&& is_array($this->config['messages'])) ? $this->config['messages'] : array();
+			$this->config['messages'] = $messages;
+		}
+		else
+		{
+			$this->config['message'] = $message;
+		}
 	}
 
 	/**

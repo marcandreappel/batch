@@ -13,11 +13,11 @@ namespace Batch\Data;
 class Message {
 
 	/** @var string */
-	public $language;
-	/** @var string|void */
-	public $title;
-	/** @var string */
 	public $body;
+	/** @var string|null */
+	public $title = null;
+	/** @var string */
+	public $language;
 
 	/**
 	 * Message constructor.
@@ -26,10 +26,17 @@ class Message {
 	 * @param string      $body
 	 * @param string|null $title
 	 */
-	public function __construct($language, string $body, ?string $title)
+	public function __construct(string $body, ?string $title, ?string $language)
 	{
-		$this->language = $language;
 		$this->body = $body;
 		$this->title = $title;
+		if (is_null($language))
+		{
+			unset($this->language);
+		}
+		else
+		{
+			$this->language = $language;
+		}
 	}
 }

@@ -39,7 +39,7 @@ class Transactional extends BatchAbstract
 		{
 			$errors[] = "A correct group id is required";
 		}
-		if (!key_exists('messages', $config) || !is_object($config['messages']) || empty($config['messages']))
+		if (!array_key_exists('message', $config) || empty($config['message']))
 		{
 			$errors[] = "A localized message is required";
 		}
