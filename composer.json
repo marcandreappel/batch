@@ -6,8 +6,8 @@
   "license": "MIT",
   "homepage": "http://github.com/marcandreappel/batch",
   "support": {
-    "issues": "https://github.com/briannesbitt/batch/issues",
-    "source": "https://github.com/briannesbitt/batch"
+    "issues": "https://github.com/marcandreappel/batch/issues",
+    "source": "https://github.com/marcandreappel/batch"
   },
   "authors": [
     {
@@ -16,8 +16,10 @@
     }
   ],
   "require": {
-    "php": ">=7.0",
-    "guzzlehttp/guzzle": "^6.3"
+    "php": ">=7.2",
+    "ext-json": "*",
+    "ext-curl": "*",
+    "guzzlehttp/guzzle": "~6.3.0"
   },
   "autoload": {
     "psr-4": {
