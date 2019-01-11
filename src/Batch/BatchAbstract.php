@@ -107,9 +107,9 @@ abstract class BatchAbstract extends BatchException
 		$message  = new Message($body, $title, $language);
 
 		if (!is_null($language)) {
-			$messages[]               = $message;
 			$messages = (array_key_exists('messages', $this->config)
 				&& is_array($this->config['messages'])) ? $this->config['messages'] : array();
+			$messages[]               = $message;
 			$this->config['messages'] = $messages;
 		}
 		else
