@@ -1,10 +1,10 @@
 <?php
 /**
  * Campaign.php
- * @author      Marc-André Appel <support@sudimage.fr>
- * @copyright   2018 Sudimage Communication
- * @license     http://opensource.org/licenses/MIT MIT
- * @link        https://www.sudimage.fr
+ * @author      Marc-André Appel <marc-andre@appel.fun>
+ * @copyright   2018 Marc-André Appel
+ * @license     http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
+ * @link        https://github.com/marcandreappel/batch
  * @created     04/05/2018
  */
 
@@ -16,7 +16,7 @@ use Batch\Exception\BatchException;
 
 class Campaign extends BatchAbstract
 {
-	const CUSTOM_DATA_PATH = "campaigns/create";
+	protected $config = array('live' => true);
 
 	/**
 	 * Campaign constructor.
@@ -27,8 +27,7 @@ class Campaign extends BatchAbstract
 	 */
 	public function __construct($apiKey, $restKey, $apiVersion = "1.1")
 	{
-		parent::__construct($apiKey, $restKey, $apiVersion);
-		$this->baseURL .= "/" . self::CUSTOM_DATA_PATH;
+		parent::__construct($apiKey, $restKey, $apiVersion, parent::CAMPAIGN_PATH);
 	}
 
 	/**
