@@ -1,10 +1,10 @@
 <?php
 /**
  * Campaign.php
- * @author      Marc-André Appel <support@sudimage.fr>
- * @copyright   2018 Sudimage Communication
- * @license     http://opensource.org/licenses/MIT MIT
- * @link        https://www.sudimage.fr
+ * @author      Marc-André Appel <marc-andre@appel.fun>
+ * @copyright   2018 Marc-André Appel
+ * @license     http://opensource.org/licenses/LGPL-3.0 LGPL-3.0
+ * @link        https://github.com/marcandreappel/batch
  * @created     04/05/2018
  */
 
