@@ -130,11 +130,10 @@ abstract class BatchAbstract extends BatchException
 
 			return $error->getMessage();
 		}
-
 		$client = new Client();
 		try
 		{
-			return $client->request(
+			$request = $client->request(
 				"POST", $this->baseURL,
 				array(
 					"headers" => array(
@@ -143,11 +142,11 @@ abstract class BatchAbstract extends BatchException
 					),
 					"json" => $this->config
 				));
+			return $request;
 		}
 		catch (GuzzleException $exception)
 		{
 			$error = new BatchException($exception->getMessage());
-
 			return $error->getMessage();
 		}
 	}
