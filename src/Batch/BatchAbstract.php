@@ -141,7 +141,7 @@ abstract class BatchAbstract extends BatchException
 						"Content-Type"    => "application/json",
 						"X-Authorization" => $this->restKey
 					),
-					"json"    => $this->config
+					"json" => $this->config
 				));
 		}
 		catch (GuzzleException $exception)
