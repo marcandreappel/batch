@@ -14,13 +14,9 @@ use Batch\Exception\BatchException;
 
 class Recipients
 {
-	/** @var array|null */
-	private $tokens = null;
-	/** @var array|null */
-	private $customIDs = null;
-	/** @var array|null */
-	private $installIDs = null;
+	public $recipients;
 
+	private $types = array('tokens' => 'tokens', 'customIDs' => 'custom_ids', 'installIDs' => 'install_ids');
 	/**
 	 * Recipients constructor.
 	 *
@@ -29,9 +25,9 @@ class Recipients
 	 */
 	public function __construct(string $type, array $recipients)
 	{
-		if (property_exists(self::class, $type) && is_array($recipients))
+		if (array_key_exists($type, $this->types) && is_array($recipients))
 		{
-			$this->$type = $recipients;
+			$this->recipients = array($this->types[$type] => $recipients);
 		}
 		else
 		{

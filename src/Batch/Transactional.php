@@ -44,8 +44,7 @@ class Transactional extends BatchAbstract
 			$errors[] = "A localized message is required";
 		}
 		if (!array_key_exists('recipients', $config)
-			|| !is_object($config['recipients'])
-			|| !($config['recipients'] instanceof Recipients)
+			|| !is_array($config['recipients'])
 			)
 		{
 			$errors[] = "Incorrect recipients field";
@@ -66,6 +65,6 @@ class Transactional extends BatchAbstract
 	public function setRecipients(string $type, array $recipients): void
 	{
 		$recipientsObject = new Recipients($type, $recipients);
-		$this->config['recipients'] = $recipientsObject;
+		$this->config['recipients'] = $recipientsObject->recipients;
 	}
 }
