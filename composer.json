@@ -19,7 +19,7 @@
     "php": ">=7.2",
     "ext-json": "*",
     "ext-curl": "*",
-    "guzzlehttp/guzzle": "~6.3.0"
+    "guzzlehttp/guzzle": "~6.3.0 || ~6.4.0"
   },
   "autoload": {
     "psr-4": {
